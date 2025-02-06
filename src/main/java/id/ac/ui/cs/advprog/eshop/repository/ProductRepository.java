@@ -7,15 +7,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/// Repository decorator, responsible for data storage and retrieval
 @Repository
 public class ProductRepository {
+    ///  declares in memory list that stores products
     private List<Product> productData = new ArrayList<>();
 
+    ///  adds new product to the list
     public Product create(Product product) {
         productData.add(product);
         return product;
     }
 
+    /// returns Iterator<Product> to allow iteration over stored products
     public Iterator<Product> findAll() {
         return productData.iterator();
     }
