@@ -33,8 +33,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> findAll() {
         Iterator<Product> productIterator = productRepository.findAll();
-        List<Product> AllProduct = new ArrayList<>();
-        productIterator.forEachRemaining(AllProduct::add);
-        return AllProduct;
+        List<Product> allProduct = new ArrayList<>();
+        productIterator.forEachRemaining(allProduct::add);
+        return allProduct;
     }
 }

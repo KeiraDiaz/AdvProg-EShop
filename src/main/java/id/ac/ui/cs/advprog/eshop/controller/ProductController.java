@@ -26,7 +26,8 @@ public class ProductController {
     /// returns the "createProduct" view
     @GetMapping("/create")
     public String createProductPage(Model model) {
-        model.addAttribute("product", new Product());
+        Product product = new Product();
+        model.addAttribute("product",product);
         return "createProduct";
     }
 
@@ -41,10 +42,10 @@ public class ProductController {
 
     /// handles GET requests to "/product"
     /// fetches all products and adds them to the model
-    @GetMapping
-    public String productlistPage(Model model) {
+    @GetMapping("/list")
+    public String listProduct(Model model) {
         List<Product> allProducts = service.findAll();
         model.addAttribute("products", allProducts);
-        return "productlist";
+        return "productList";
     }
 }
