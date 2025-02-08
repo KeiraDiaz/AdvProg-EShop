@@ -9,6 +9,8 @@ public interface ProductService {
     /// available methods to be implemented
     public Product create(Product product);
     public List<Product> findAll();
+    public Product update(Product product);
+
 }
 
 

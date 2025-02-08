@@ -19,7 +19,7 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    /// calls methods of ProductRepository which stores a an object of
+    /// calls methods of ProductRepository which stores an object of
     /// Product class
     @Override
     public Product create(Product product) {
@@ -36,5 +36,11 @@ public class ProductServiceImpl implements ProductService {
         List<Product> allProduct = new ArrayList<>();
         productIterator.forEachRemaining(allProduct::add);
         return allProduct;
+    }
+
+    @Override
+    public Product update(Product product) {
+        productRepository.update(product);
+        return product;
     }
 }

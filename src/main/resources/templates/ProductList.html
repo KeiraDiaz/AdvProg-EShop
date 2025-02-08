@@ -38,9 +38,26 @@
       padding: 15px;
       margin-bottom: 15px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .product-card h5 {
       margin-bottom: 5px;
+    }
+    .btn-edit {
+      background-color: #FC8EAC;
+      color: #000;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-weight: 600;
+      text-align: center;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .btn-edit:hover {
+      background-color: #A94064;
     }
   </style>
 </head>
@@ -59,7 +76,8 @@
     <div class="col-md-4" th:each="product: ${products}">
       <div class="product-card">
         <h5 th:text="${product.productName}"></h5>
-        <p>Quantity: <span th:text="${product.productQuantity}"></span></p>
+        <p>Quantity: <span th:text="${product.productQuantity}"></span></p>\
+        <a th:href="@{/edit/{id}(id=${product.productId})}" class="btn btn-edit">Edit</a>
       </div>
     </div>
   </div>

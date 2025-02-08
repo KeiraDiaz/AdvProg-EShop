@@ -19,6 +19,15 @@ public class ProductRepository {
         return product;
     }
 
+    ///  deletes product form the list
+
+    /// prototype update function, not entirely sure that it works yet
+    public Product update(Product product) {
+        int index = productData.indexOf(product);
+        productData.set(index, product);
+        return product;
+    }
+
     /// returns Iterator<Product> to allow iteration over stored products
     public Iterator<Product> findAll() {
         return productData.iterator();
