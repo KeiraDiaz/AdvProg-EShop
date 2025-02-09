@@ -8,33 +8,37 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
-/// declares that this class is a Spring Service and provides actual implementation
-/// of service methods related to the ProductService Class
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    /// automatically injects an instance of ProductRepository
-    /// recall that productRepository is a reference to the repo layer
     @Autowired
     private ProductRepository productRepository;
 
-    /// calls methods of ProductRepository which stores a an object of
-    /// Product class
     @Override
     public Product create(Product product) {
         productRepository.create(product);
         return product;
     }
 
-    /// calls find.All() which return Iterator
-    /// converts Iterator<Product> into List<Product>
-    /// Returns list of all products
     @Override
     public List<Product> findAll() {
         Iterator<Product> productIterator = productRepository.findAll();
         List<Product> allProduct = new ArrayList<>();
         productIterator.forEachRemaining(allProduct::add);
         return allProduct;
+    }
+
+    @Override
+    public Product update(Product product) {
+        productRepository.update(product);
+        return product;
+    }
+
+    @Override
+    public Product findById(String productId) {
+        Optional<Product> product = productRepository.findById(productId);
+        return product.orElse(null); // Return null if product not found
     }
 }

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Product</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #2F4F4F;
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .card {
+      background-color: #3E5F5F;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 500px;
+    }
+    .form-control {
+      background-color: #607D8B;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .form-control::placeholder {
+      color: #B0BEC5;
+    }
+    .btn-primary {
+      background-color: #607D8B;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      width: 100%;
+    }
+    .btn-primary:hover {
+      background-color: #78909C;
+    }
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 10px;
+      color: #B0BEC5;
+      text-decoration: none;
+    }
+    .back-link:hover {
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h3 class="text-center mb-4">Edit Product</h3>
+  <form th:action="@{/product/edit}" th:object="${product}" method="post">
+    <input type="hidden" th:field="*{productId}">
+    <div class="form-group">
+      <label for="nameInput">Product Name</label>
+      <input th:field="*{productName}" type="text" class="form-control" id="nameInput" placeholder="Enter product name" required>
+    </div>
+    <div class="form-group mt-3">
+      <label for="quantityInput">Quantity</label>
+      <input th:field="*{productQuantity}" type="number" class="form-control" id="quantityInput" placeholder="Enter quantity" required>
+    </div>
+    <div class="text-center mt-4">
+      <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+  </form>
+  <a href="/product/list" class="back-link">Back to List</a>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
