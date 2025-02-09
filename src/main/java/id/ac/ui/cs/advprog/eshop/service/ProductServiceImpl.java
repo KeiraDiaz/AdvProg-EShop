@@ -42,5 +42,9 @@ public class ProductServiceImpl implements ProductService {
         return product.orElse(null); // Return null if product not found
     }
 
+    @Override
+    public Product delete(String productId) {
+        return productRepository.delete(productId);
+    }
 
 }
