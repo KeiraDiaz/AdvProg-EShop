@@ -54,4 +54,15 @@ public class ProductController {
         service.update(product);
         return "redirect:list";
     }
+
+    @PostMapping("/delete/{productId}")
+    public String deleteProduct(@PathVariable String productId, Model model) {
+        Product deletedProduct = service.delete(productId);
+        if (deletedProduct != null) {
+            model.addAttribute("message", "Product deleted successfully: " + deletedProduct.getProductName());
+        } else {
+            model.addAttribute("message", "Product not found");
+        }
+        return "redirect:/product/list";
+    }
 }

@@ -59,6 +59,20 @@
     .btn-edit:hover {
       background-color: #A94064;
     }
+    .btn-delete {
+      background-color: #FF5252;
+      color: #000;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-weight: 600;
+      text-align: center;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .btn-delete:hover {
+      background-color: #D32F2F;
+    }
   </style>
 </head>
 <body>
@@ -78,6 +92,9 @@
         <h5 th:text="${product.productName}"></h5>
         <p>Quantity: <span th:text="${product.productQuantity}"></span></p>
         <a th:href="@{/product/edit/{id}(id=${product.productId})}" class="btn btn-edit">Edit</a>
+        <form th:action="@{/product/delete/{id}(id=${product.productId})}" method="post" style="display: inline;">
+          <button type="submit" class="btn btn-delete">Delete</button>
+        </form>
       </div>
     </div>
   </div>
