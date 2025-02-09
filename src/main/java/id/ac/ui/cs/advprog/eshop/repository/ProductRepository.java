@@ -58,4 +58,21 @@ public class ProductRepository {
                 .findFirst();
     }
 
+    public Product delete(String productId) {
+        if (productId == null) {
+            throw new IllegalArgumentException("Product ID cannot be null");
+        }
+
+        Iterator<Product> iterator = productData.iterator();
+        while (iterator.hasNext()) {
+            Product product = iterator.next();
+            if (product.getProductId().equals(productId)) {
+                iterator.remove();
+                return product;
+            }
+        }
+
+        return null;
+    }
+
 }
