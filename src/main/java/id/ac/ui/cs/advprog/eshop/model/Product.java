@@ -10,5 +10,11 @@ public class Product {
     private int productQuantity;
 
     public Product(String productId, String productName, int productQuantity) {
+        this.productId = productId;
+        this.productName = productName;
+        this.productQuantity = productQuantity;
     }
+
+    // Default constructor for Spring form binding
+    public Product() {}
 }

@@ -9,39 +9,29 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
-/// declares that this class is a Spring MVC Controller
-/// handles web requests related to products
 @Controller
 @RequestMapping("/product")
 public class ProductController {
 
-    /// automatically injects an instance of ProductService
-    /// service is a reference to the business logic layer
     @Autowired
     private ProductService service;
 
-    /// handles GET requests to "/product/create"
-    /// prepares a new Product object and adds it to the model
-    /// returns the "createProduct" view
     @GetMapping("/create")
     public String createProductPage(Model model) {
         Product product = new Product();
-        model.addAttribute("product",product);
+        model.addAttribute("product", product);
         return "createProduct";
     }
 
-    /// handles POST requests to "/product/create"
-    /// processes form submission and saves the new product
-    /// redirects to the product list page
     @PostMapping("/create")
-    public String createProductPost(@ModelAttribute Product product, Model model) {
+    public String createProductPost(@ModelAttribute Product product) {
+        product.setProductId(UUID.randomUUID().toString());
         service.create(product);
         return "redirect:list";
     }
 
-    /// handles GET requests to "/product"
-    /// fetches all products and adds them to the model
     @GetMapping("/list")
     public String listProduct(Model model) {
         List<Product> allProducts = service.findAll();
@@ -49,4 +39,19 @@ public class ProductController {
         return "productList";
     }
 
+    @GetMapping("/edit/{productId}")
+    public String editProductPage(@PathVariable String productId, Model model) {
+        Product product = service.findById(productId);
+        if (product == null) {
+            return "redirect:/list";
+        }
+        model.addAttribute("product", product);
+        return "EditProduct";
+    }
+
+    @PostMapping("/edit")
+    public String updateProduct(@ModelAttribute Product product) {
+        service.update(product);
+        return "redirect:list";
+    }
 }

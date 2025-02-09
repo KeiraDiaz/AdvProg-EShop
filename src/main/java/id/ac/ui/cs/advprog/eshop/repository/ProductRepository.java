@@ -26,7 +26,7 @@ public class ProductRepository {
     /// After some thinking, decided that to make product objects immutable,
     /// essentially making it so that there is no risk of race conditions, and
     /// for predictability, it also works better with concurrency. Too soon to tell
-    /// if needs to be changed yet or not...
+    /// if this needs to be changed yet or not...
 
     public Optional<Product> update(Product updatedProduct) {
         if (updatedProduct == null) {
@@ -50,6 +50,12 @@ public class ProductRepository {
         }
 
         return Optional.empty();
+    }
+
+    public Optional<Product> findById(String productId) {
+        return productData.stream()
+                .filter(product -> product.getProductId().equals(productId))
+                .findFirst();
     }
 
 }

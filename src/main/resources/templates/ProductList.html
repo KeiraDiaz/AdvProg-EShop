@@ -76,8 +76,8 @@
     <div class="col-md-4" th:each="product: ${products}">
       <div class="product-card">
         <h5 th:text="${product.productName}"></h5>
-        <p>Quantity: <span th:text="${product.productQuantity}"></span></p>\
-        <a th:href="@{/edit/{id}(id=${product.productId})}" class="btn btn-edit">Edit</a>
+        <p>Quantity: <span th:text="${product.productQuantity}"></span></p>
+        <a th:href="@{/product/edit/{id}(id=${product.productId})}" class="btn btn-edit">Edit</a>
       </div>
     </div>
   </div>
