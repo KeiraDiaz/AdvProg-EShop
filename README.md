@@ -11,6 +11,9 @@
   <details>
     <summary><strong><span style="font-size: 16px;">➡️ Reflection 2 (Click to Expand)</span></strong></summary>
 
+Writing unit tests is an essential practice to ensure that individual components of a program function as expected. However, determining the right number of unit tests in a class depends on the complexity of the functionality being tested. A well-structured test suite should cover all possible scenarios, including edge cases, to ensure robustness. One way to measure the effectiveness of tests is through code coverage, which indicates the percentage of code that is executed during testing. While achieving 100% code coverage is beneficial, it does not necessarily guarantee the absence of bugs, as it does not account for logical errors, unexpected input handling, or integration issues. Therefore, while high code coverage is a useful metric, it should be complemented with thorough test case design and real-world scenario testing.
+
+When expanding a test suite, code cleanliness becomes a crucial consideration. If a new functional test suite, such as verifying the number of items in the product list, is implemented with redundant setup procedures and instance variables, it may lead to code duplication and reduced maintainability. Writing similar test classes without reusing existing code can make future updates and debugging more challenging. To improve code quality, common functionalities should be extracted into reusable methods or base classes to follow the DRY (Don't Repeat Yourself) principle. Additionally, organizing tests logically and ensuring a clear separation of concerns enhances readability and maintainability, making the test suite more efficient and scalable. By focusing on these principles, we can create a well-structured test suite that is both comprehensive and easy to manage.
   </details>
 
 </details>
