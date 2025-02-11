@@ -5,17 +5,23 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Iterator;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ProductRepositoryTest {
 
     @InjectMocks
     ProductRepository productRepository;
+
+    @Mock
+    ProductRepository mockProductRepository;
 
     @BeforeEach
     void setUp() {
@@ -64,7 +70,52 @@ class ProductRepositoryTest {
         savedProduct = productIterator.next();
         assertEquals(product2.getProductId(), savedProduct.getProductId());
         assertFalse(productIterator.hasNext());
-
     }
 
+    @Test
+    void testUpdateProduct_Success() {
+        Product product = new Product("123", "Test Product", 50);
+        when(mockProductRepository.update(product)).thenReturn(Optional.of(product));
+        Optional<Product> updatedProduct = mockProductRepository.update(product);
+        assertTrue(updatedProduct.isPresent());
+        assertEquals("Test Product", updatedProduct.get().getProductName());
+        verify(mockProductRepository, times(1)).update(product);
+    }
+
+    @Test
+    void testUpdateProduct_ProductNotFound() {
+        Product product = new Product("123", "Test Product", 50);
+        when(mockProductRepository.update(product)).thenReturn(Optional.empty());
+        Optional<Product> updatedProduct = mockProductRepository.update(product);
+        assertFalse(updatedProduct.isPresent());
+        verify(mockProductRepository, times(1)).update(product);
+    }
+
+    @Test
+    void testUpdateProduct_NullProduct() {
+        assertThrows(IllegalArgumentException.class, () -> productRepository.update(null));
+    }
+
+    @Test
+    void testDeleteProduct_Success() {
+        Product product = new Product("123", "Test Product", 50);
+        when(mockProductRepository.delete("123")).thenReturn(product);
+        Product deletedProduct = mockProductRepository.delete("123");
+        assertNotNull(deletedProduct);
+        assertEquals("123", deletedProduct.getProductId());
+        verify(mockProductRepository, times(1)).delete("123");
+    }
+
+    @Test
+    void testDeleteProduct_ProductNotFound() {
+        when(mockProductRepository.delete("123")).thenReturn(null);
+        Product deletedProduct = mockProductRepository.delete("123");
+        assertNull(deletedProduct);
+        verify(mockProductRepository, times(1)).delete("123");
+    }
+
+    @Test
+    void testDeleteProduct_NullId() {
+        assertThrows(IllegalArgumentException.class, () -> productRepository.delete(null));
+    }
 }
