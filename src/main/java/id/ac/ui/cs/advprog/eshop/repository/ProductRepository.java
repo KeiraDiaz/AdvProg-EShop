@@ -32,18 +32,20 @@ public class ProductRepository {
         if (updatedProduct == null) {
             throw new IllegalArgumentException("Updated product cannot be null");
         }
-        String productId = updatedProduct.getProductId();
-        for (int i = 0; i < productData.size(); i++) {
 
+        String productId = updatedProduct.getProductId();
+        if (productId == null || productId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Product ID cannot be null or empty");
+        }
+
+        for (int i = 0; i < productData.size(); i++) {
             Product existingProduct = productData.get(i);
             if (existingProduct.getProductId().equals(productId)) {
-
                 Product newProduct = new Product(
                         existingProduct.getProductId(),
                         updatedProduct.getProductName(),
                         updatedProduct.getProductQuantity()
                 );
-
                 productData.set(i, newProduct);
                 return Optional.of(newProduct);
             }
@@ -59,8 +61,8 @@ public class ProductRepository {
     }
 
     public Product delete(String productId) {
-        if (productId == null) {
-            throw new IllegalArgumentException("Product ID cannot be null");
+        if (productId == null || productId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Product ID cannot be null or empty");
         }
 
         Iterator<Product> iterator = productData.iterator();

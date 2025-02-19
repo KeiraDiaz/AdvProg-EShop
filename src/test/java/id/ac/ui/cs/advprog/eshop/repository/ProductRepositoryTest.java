@@ -138,4 +138,61 @@ class ProductRepositoryTest {
         assertTrue(foundProduct.isPresent());
         assertEquals(product, foundProduct.get());
     }
+
+    @Test
+    void testUpdateProduct_EmptyId() {
+        Product product = new Product("", "Invalid Product", 50);
+        assertThrows(IllegalArgumentException.class, () -> productRepository.update(product));
+    }
+
+    @Test
+    void testUpdateProduct_NoChange() {
+        Product product = new Product("123", "Same Product", 50);
+        productRepository.create(product);
+        Optional<Product> updatedProduct = productRepository.update(new Product("123", "Same Product", 50));
+        assertTrue(updatedProduct.isPresent());
+        assertEquals("Same Product", updatedProduct.get().getProductName());
+    }
+
+    @Test
+    void testDeleteProduct_EmptyId() {
+        assertThrows(IllegalArgumentException.class, () -> productRepository.delete(""));
+    }
+
+    @Test
+    void testUpdateProduct_DifferentId() {
+        Product product1 = new Product("123", "Product A", 50);
+        Product product2 = new Product("456", "Product B", 75);
+        productRepository.create(product1);
+        productRepository.create(product2);
+
+        Product updateRequest = new Product("789", "Non-Matching Product", 100);
+        Optional<Product> updatedProduct = productRepository.update(updateRequest);
+
+        assertFalse(updatedProduct.isPresent());
+    }
+
+    @Test
+    void testDeleteProduct_DifferentId() {
+        Product product1 = new Product("123", "Product A", 50);
+        Product product2 = new Product("456", "Product B", 75);
+        productRepository.create(product1);
+        productRepository.create(product2);
+
+        Product deletedProduct = productRepository.delete("789");
+        assertNull(deletedProduct);
+    }
+
+    @Test
+    void testUpdateProduct_NullProductId() {
+        Product product = new Product(null, "Test Product", 50);
+        assertThrows(IllegalArgumentException.class, () -> productRepository.update(product));
+    }
+
+    @Test
+    void testUpdateProduct_EmptyProductId() {
+        Product product = new Product("  ", "Test Product", 50);
+        assertThrows(IllegalArgumentException.class, () -> productRepository.update(product));
+    }
+
 }
