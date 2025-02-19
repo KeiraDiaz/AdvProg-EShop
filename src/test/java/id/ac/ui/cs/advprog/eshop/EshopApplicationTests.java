@@ -2,16 +2,17 @@ package id.ac.ui.cs.advprog.eshop;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
 class EshopApplicationTests {
+
     @Test
     void contextLoads() {
     }
 
     @Test
     void testMainMethod() {
-        EshopApplication.main(new String[]{});
+        assertDoesNotThrow(() -> EshopApplication.main(new String[]{}), "The main method should run without throwing an exception");
     }
-
 }

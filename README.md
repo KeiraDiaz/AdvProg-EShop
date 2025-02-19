@@ -17,3 +17,25 @@ When expanding a test suite, code cleanliness becomes a crucial consideration. I
   </details>
 
 </details>
+
+
+<details>
+  <summary><strong><span style="font-size: 30px;">📌 Module 02 </span></strong></summary>
+
+
+
+  <details>
+    <summary><strong><span style="font-size: 16px;">➡️ Reflection 1 (Click to Expand)</span></strong></summary>
+
+
+
+  </details>
+
+  <details>
+    <summary><strong><span style="font-size: 16px;">➡️ Reflection 2 (Click to Expand)</span></strong></summary>
+
+
+
+  </details>
+
+</details>
