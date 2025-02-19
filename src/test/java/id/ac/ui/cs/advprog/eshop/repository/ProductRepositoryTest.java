@@ -74,21 +74,18 @@ class ProductRepositoryTest {
 
     @Test
     void testUpdateProduct_Success() {
-        Product product = new Product("123", "Test Product", 50);
-        when(mockProductRepository.update(product)).thenReturn(Optional.of(product));
-        Optional<Product> updatedProduct = mockProductRepository.update(product);
+        Product product = new Product("123", "Updated Product", 100);
+        productRepository.create(new Product("123", "Old Product", 50));
+        Optional<Product> updatedProduct = productRepository.update(product);
         assertTrue(updatedProduct.isPresent());
-        assertEquals("Test Product", updatedProduct.get().getProductName());
-        verify(mockProductRepository, times(1)).update(product);
+        assertEquals("Updated Product", updatedProduct.get().getProductName());
     }
 
     @Test
-    void testUpdateProduct_ProductNotFound() {
-        Product product = new Product("123", "Test Product", 50);
-        when(mockProductRepository.update(product)).thenReturn(Optional.empty());
-        Optional<Product> updatedProduct = mockProductRepository.update(product);
+    void testUpdateProduct_NotFound() {
+        Product product = new Product("999", "Nonexistent Product", 50);
+        Optional<Product> updatedProduct = productRepository.update(product);
         assertFalse(updatedProduct.isPresent());
-        verify(mockProductRepository, times(1)).update(product);
     }
 
     @Test
@@ -99,23 +96,46 @@ class ProductRepositoryTest {
     @Test
     void testDeleteProduct_Success() {
         Product product = new Product("123", "Test Product", 50);
-        when(mockProductRepository.delete("123")).thenReturn(product);
-        Product deletedProduct = mockProductRepository.delete("123");
+        productRepository.create(product);
+        Product deletedProduct = productRepository.delete("123");
         assertNotNull(deletedProduct);
         assertEquals("123", deletedProduct.getProductId());
-        verify(mockProductRepository, times(1)).delete("123");
+        assertFalse(productRepository.findById("123").isPresent());
     }
 
     @Test
-    void testDeleteProduct_ProductNotFound() {
-        when(mockProductRepository.delete("123")).thenReturn(null);
-        Product deletedProduct = mockProductRepository.delete("123");
+    void testDeleteProduct_NotFound() {
+        Product deletedProduct = productRepository.delete("999");
         assertNull(deletedProduct);
-        verify(mockProductRepository, times(1)).delete("123");
     }
 
     @Test
     void testDeleteProduct_NullId() {
         assertThrows(IllegalArgumentException.class, () -> productRepository.delete(null));
+    }
+
+    @Test
+    void testFindById_ProductFound() {
+        Product product = new Product("123", "Test Product", 50);
+        productRepository.create(product);
+        Optional<Product> foundProduct = productRepository.findById("123");
+        assertTrue(foundProduct.isPresent());
+        assertEquals("123", foundProduct.get().getProductId());
+    }
+
+    @Test
+    void testFindById_ProductNotFound() {
+        Optional<Product> foundProduct = productRepository.findById("123");
+        assertFalse(foundProduct.isPresent());
+    }
+
+    @Test
+    void testCreateProduct() {
+        Product product = new Product("123", "Test Product", 50);
+        Product createdProduct = productRepository.create(product);
+        assertEquals(product, createdProduct);
+        Optional<Product> foundProduct = productRepository.findById("123");
+        assertTrue(foundProduct.isPresent());
+        assertEquals(product, foundProduct.get());
     }
 }
