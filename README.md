@@ -4,7 +4,7 @@
   <details>
     <summary><strong><span style="font-size: 16px;">➡️ Reflection 1 (Click to Expand)</span></strong></summary>
 
-  Through this process, there were multiple times I showcased proper coding standards. When creating new variables and functions, I was always warry to name them something that would make sense to me in the future. In addition to that, I try my best to create functions that best reflect their logic, seperating functions if needed but essentially making sure that they would serve one specific purpose. All the function names like findById or update. In addition to coding practices, during the stage when I was creating comments, at first I added comments that would help me learn better. As time went on, I not longer needed them so I cleaned them up with minimal comments and only include important comments like explanation of intent. In addition to comments, I made sure leave plenty of blank lines between code for readability. For this repository, I used feature branching as my workflow. One thing I would like to improve is maybe change the ProductData to a hash map for more efficient reasons. All in all, I think my code is satisfactory.
+  Through this process, there were multiple times I showcased proper coding standards. When creating new variables and functions, I was always warry to name them something that would make sense to me in the future. In addition to that, I try my best to create functions that best reflect their logic, seperating functions if needed but essentially making sure that they would serve one specific purpose. All the function names like findById or update. In addition to coding practices, during the stage when I was creating comments, at first I added comments that would help me learn better. As time went on, I no longer needed them, so I cleaned them up with minimal comments and only include important comments like explanation of intent. In addition to comments, I made sure leave plenty of blank lines between code for readability. For this repository, I used feature branching as my workflow. One thing I would like to improve is maybe change the ProductData to a hash map for more efficient reasons. All in all, I think my code is satisfactory.
 
   </details>
 
@@ -27,12 +27,16 @@ When expanding a test suite, code cleanliness becomes a crucial consideration. I
   <details>
     <summary><strong><span style="font-size: 16px;">➡️ Reflection 1 (Click to Expand)</span></strong></summary>
 
-
+One of the main code quality issues I tackled was the lack of assertions in some test. I noticed when reviewing sonar cloud that the code quality issues that were in the danger zone of maintainability were to do with lack of assertions in my EshopApplicationTests and CreateProductFunctional. When initially creating the tests, I didn't think they needed assertions because EshopApplicationTests was just to run main, but I realized that it had to make sure that main ran without any issues. On the other hand for the functional was to simply test if the product created showed on the page. 
 
   </details>
 
   <details>
     <summary><strong><span style="font-size: 16px;">➡️ Reflection 2 (Click to Expand)</span></strong></summary>
+
+Look at your CI/CD workflows (GitHub)/pipelines (GitLab). Do you think the current implementation has met the definition of Continuous Integration and Continuous Deployment? Explain the reasons (minimum 3 sentences)!
+
+Yes! The CI workflow ensures the project is built correctly and automated tests run on every push or pull request, helping catch issues early. By definition of CI, this would be the optimum implementation of it. In terms of CD, I decided to use koyeb's built in auto deploy which would continously deploy on every push to my repository on GitHub.
 
 
 
