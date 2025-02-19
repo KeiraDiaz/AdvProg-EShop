@@ -5,9 +5,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class EshopApplicationTests {
-
     @Test
     void contextLoads() {
+    }
+
+    @Test
+    void testMainMethod() {
+        EshopApplication.main(new String[]{});
     }
 
 }
