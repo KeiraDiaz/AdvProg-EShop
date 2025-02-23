@@ -8,5 +8,6 @@ public class Car {
     private String carId;
     private String carName;
     private String carColor;
+    private String carQuantity;
 
 }
