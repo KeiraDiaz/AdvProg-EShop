@@ -57,13 +57,17 @@ public class ProductController {
         return "redirect:list";
     }
 
-    @PostMapping("/delete")
-    public String deleteProduct(@RequestParam("productID") String productId) {
+    @PostMapping("/delete/{productId}")
+    public String deleteProduct(@PathVariable String productId, Model model) {
         Product deletedProduct = service.delete(productId);
+        if (deletedProduct != null) {
+            model.addAttribute("message", "Product deleted successfully: " + deletedProduct.getProductName());
+        } else {
+            model.addAttribute("message", "Product not found");
+        }
         return "redirect:/product/list";
     }
 }
-
 @Controller
 @RequestMapping("/car")
 class CarController extends ProductController {
