@@ -68,7 +68,6 @@ public class ProductController {
         return "redirect:/product/list";
     }
 }
-
 @Controller
 @RequestMapping("/car")
 class CarController extends ProductController {
