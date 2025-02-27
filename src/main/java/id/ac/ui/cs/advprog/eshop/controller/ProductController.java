@@ -42,23 +42,23 @@ public class ProductController {
     }
 
     @GetMapping("/edit/{productId}")
-    public String editProductPage(@PathVariable String productId, Model model) {
+    public String editProductPage(@PathVariable("productId") String productId, Model model) {
         Product product = service.findById(productId);
-        if (product == null) {
-            return "redirect:/list";
+        if (product != null) {
+            model.addAttribute("product", product);
+            return "EditProduct";
         }
-        model.addAttribute("product", product);
-        return "EditProduct";
+        return "redirect:/product/list";
     }
 
     @PostMapping("/edit")
-    public String updateProduct(@ModelAttribute Product product) {
-        service.update(product);
+    public String updateProduct(@RequestParam("productId") String productId, @ModelAttribute Product product) {
+        service.update(productId, product);
         return "redirect:list";
     }
 
     @PostMapping("/delete/{productId}")
-    public String deleteProduct(@PathVariable String productId, Model model) {
+    public String deleteProduct(@PathVariable("productId") String productId, Model model) {
         Product deletedProduct = service.delete(productId);
         if (deletedProduct != null) {
             model.addAttribute("message", "Product deleted successfully: " + deletedProduct.getProductName());

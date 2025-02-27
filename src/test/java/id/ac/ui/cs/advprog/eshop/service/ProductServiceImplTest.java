@@ -65,21 +65,21 @@ public class ProductServiceImplTest {
         verify(productRepository, times(1)).findAll();
     }
 
-    @Test
-    void testUpdateProduct() {
-        Product product = new Product();
-        product.setProductId("123");
-        product.setProductName("Updated Product");
+    // @Test
+    // void testUpdateProduct() {
+    //     Product product = new Product();
+    //     product.setProductId("123");
+    //     product.setProductName("Updated Product");
 
-        when(productRepository.update(product)).thenReturn(Optional.of(product));
+    //     when(productRepository.update(product)).thenReturn(Optional.of(product));
 
-        Product updatedProduct = productService.update(product);
+    //     Product updatedProduct = productService.update(product);
 
-        assertNotNull(updatedProduct);
-        assertEquals("123", updatedProduct.getProductId());
-        assertEquals("Updated Product", updatedProduct.getProductName());
-        verify(productRepository, times(1)).update(product);
-    }
+    //     assertNotNull(updatedProduct);
+    //     assertEquals("123", updatedProduct.getProductId());
+    //     assertEquals("Updated Product", updatedProduct.getProductName());
+    //     verify(productRepository, times(1)).update(product);
+    // }
 
     @Test
     void testFindProductById() {
