@@ -2,6 +2,11 @@
 
 __Koyeb Deploy Link__: [Eshop Application](https://excess-penelopa-keiradiaz-83ffea60.koyeb.app/)
 
+[![Continuous Integration (CI)](https://github.com/KeiraDiaz/AdvProg-EShop/actions/workflows/ci.yml/badge.svg)](https://github.com/KeiraDiaz/AdvProg-EShop/actions/workflows/ci.yml) [![SonarCloud Code](https://github.com/KeiraDiaz/AdvProg-EShop/actions/workflows/sonarcloud.yml/badge.svg)](https://github.com/KeiraDiaz/AdvProg-EShop/actions/workflows/sonarcloud.yml) [![SonarCloud Code](https://github.com/KeiraDiaz/AdvProg-EShop/actions/workflows/scorecard.yml/badge.svg)](https://github.com/KeiraDiaz/AdvProg-EShop/actions/workflows/scorecard.yml)
+
+
+
+
 ## Contents
 
 1. **MODULE 01**
@@ -53,5 +58,6 @@ Yes! The CI workflow ensures the project is built correctly and automated tests 
 ## Reflection Module 03
 
 1) Explain what principles you apply to your project!
+
 2) Explain the advantages of applying SOLID principles to your project with examples.
 3) Explain the disadvantages of not applying SOLID principles to your project with examples.
