@@ -95,7 +95,7 @@ public class ProductControllerTest {
         Product product = new Product("123", "Updated Product", 75);
         when(productService.update(anyString(), any(Product.class))).thenReturn(product);
 
-        mockMvc.perform(post("/product/update")
+        mockMvc.perform(post("/product/edit")
                 .param("productId", "123")       
                 .flashAttr("product", product))
                 .andExpect(status().is3xxRedirection())
