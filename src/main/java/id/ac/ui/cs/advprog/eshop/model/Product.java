@@ -15,6 +15,5 @@ public class Product {
         this.productQuantity = productQuantity;
     }
 
-    // Default constructor for Spring form binding
     public Product() {}
 }

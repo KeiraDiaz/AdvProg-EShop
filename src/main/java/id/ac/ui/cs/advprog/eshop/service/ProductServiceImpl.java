@@ -30,9 +30,13 @@ public class ProductServiceImpl implements ProductService {
         return allProduct;
     }
 
+
     @Override
-    public Product update(Product product) {
-        productRepository.update(product);
+    public Product update(String productId, Product product) {
+        if (productId == null || product == null) {
+            throw new IllegalArgumentException("ID and product cannot be null");
+        }
+        productRepository.update(productId, product);
         return product;
     }
 
@@ -46,5 +50,6 @@ public class ProductServiceImpl implements ProductService {
     public Product delete(String productId) {
         return productRepository.delete(productId);
     }
+
 
 }

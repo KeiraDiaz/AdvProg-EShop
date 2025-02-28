@@ -28,30 +28,26 @@ public class ProductRepository {
     /// for predictability, it also works better with concurrency. Too soon to tell
     /// if this needs to be changed yet or not...
 
-    public Optional<Product> update(Product updatedProduct) {
-        if (updatedProduct == null) {
-            throw new IllegalArgumentException("Updated product cannot be null");
-        }
-
-        String productId = updatedProduct.getProductId();
+    public Product update(String productId, Product updatedProduct) {
         if (productId == null || productId.trim().isEmpty()) {
             throw new IllegalArgumentException("Product ID cannot be null or empty");
         }
-
+        
+        if (updatedProduct == null) {
+            throw new IllegalArgumentException("Updated product cannot be null");
+        }
+        
         for (int i = 0; i < productData.size(); i++) {
-            Product existingProduct = productData.get(i);
-            if (existingProduct.getProductId().equals(productId)) {
-                Product newProduct = new Product(
-                        existingProduct.getProductId(),
-                        updatedProduct.getProductName(),
-                        updatedProduct.getProductQuantity()
-                );
-                productData.set(i, newProduct);
-                return Optional.of(newProduct);
+            Product product = productData.get(i);
+            if (product.getProductId().equals(productId)) {
+                // Update existing product fields
+                product.setProductName(updatedProduct.getProductName());
+                product.setProductQuantity(updatedProduct.getProductQuantity());
+                return product;
             }
         }
-
-        return Optional.empty();
+        
+        return null;
     }
 
     public Optional<Product> findById(String productId) {
@@ -64,6 +60,7 @@ public class ProductRepository {
         if (productId == null || productId.trim().isEmpty()) {
             throw new IllegalArgumentException("Product ID cannot be null or empty");
         }
+        
 
         Iterator<Product> iterator = productData.iterator();
         while (iterator.hasNext()) {
