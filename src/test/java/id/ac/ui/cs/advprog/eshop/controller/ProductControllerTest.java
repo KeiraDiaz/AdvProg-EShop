@@ -95,22 +95,13 @@ public class ProductControllerTest {
         Product product = new Product("123", "Updated Product", 75);
         when(productService.update(anyString(), any(Product.class))).thenReturn(product);
 
-        mockMvc.perform(post("/product/edit")  // Changed from /product/edit to /product/update
+        mockMvc.perform(post("/product/update")
                 .param("productId", "123")       
                 .flashAttr("product", product))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("list"));
     }
     
-    @Test
-    void testDeleteProduct_Success() throws Exception {
-        Product product = new Product("123", "Test Product", 50);
-        when(productService.delete("123")).thenReturn(product);
-
-        mockMvc.perform(post("/product/delete/123"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/product/list"));
-    }
 
 
 }

@@ -57,34 +57,80 @@ Yes! The CI workflow ensures the project is built correctly and automated tests 
 
 ## Reflection Module 03
 
-Single Responsibility Principle
+__Single Responsibility Principle__
 
-The way I have implemented this principle in my project is by creating separate classes for different functionalities, such as the `Product` class for product-related operations and the `Car` class for car-related  operations. This can be viewed through seperating the controllers for `Product` and `Car`. This way, the controllers are only responsible for handling HTTP requests and delegating the actual business logic to the corresponding service classes. This separation of concerns helps to keep the codebase organized and makes it easier to maintain and extend in the future. 
+The way I have implemented this principle in my project is by creating separate classes for different functionalities, such as the `Product` class for product-related operations and the `Car` class for car-related  operations. 
+
+* Models, such as Product and Car, are responsible solely for data representation, 
+* Repositories like ProductRepository and CarRepository handle only data persistence operations. 
+* Services, including ProductService and CarService, contain business logic exclusively, whereas 
+* Controllers, such as ProductController and CarController, are dedicated to handling HTTP requests. 
+
+This specific change can be viewed through seperating the controllers for `Product` and `Car`. 
+
+``` java
+@Controller
+@RequestMapping("/car")
+public class CarController {
+
+    @Autowired
+    private CarService carservice;
+
+    @GetMapping("/createCar")
+    public String createCarPage(Model model) {
+        Car car = new Car();
+        model.addAttribute("car", car);
+        return "CreateCar";
+    }
+...
+```
+
+```java
+@Controller
+@RequestMapping("/product")
+public class ProductController {
+
+    @Autowired
+    private ProductService service;
+
+    @GetMapping("/create")
+    public String createProductPage(Model model) {
+        Product product = new Product();
+        model.addAttribute("product", product);
+        return "CreateProduct";
+    }
+```
+This way, the controllers are only responsible for handling HTTP requests and delegating the actual business logic to the corresponding service classes. This separation of concerns helps to keep the codebase organized and makes it easier to maintain and extend in the future. 
 
 
-Open / Closed Principle
 
-The Open/Closed Principle (OCP) is another key principle in object-oriented design that states that software entities should be open for extension but closed for modification. This principle encourages developers to design systems that can be easily extended with new functionality without modifying existing code.
+__Open / Closed Principle__
 
-
-Liskov Substitution Principle
-
-The Liskov Substitution Principle (LSP) is a principle that states that objects of a superclass should be replaceable with objects of a subclass without affecting the correctness of the program. This principle ensures that subclasses adhere to the same contract as their superclass, allowing them to be used interchangeably.
-
-
-Interface Segregation Principle
-
-The Interface Segregation Principle (ISP) is a principle that states that clients should not be forced to depend on interfaces they do not use. This principle encourages developers to create small, cohesive interfaces that are tailored to the specific needs of clients, rather than large, monolithic interfaces that contain unnecessary methods.
-
-Dependency Inversion Principle
-
-The Dependency Inversion Principle (DIP) is a principle that states that high-level modules should not depend on low-level modules. Instead, both should depend on abstractions, this can be viewed in `CarController.java` where the controller is dependent on the service interface. This principle helps to decouple modules and reduce dependencies, making the codebase more flexible and easier to maintain.
+The Open/Closed Principle (OCP) is another key principle in object-oriented design that states that software entities should be open for extension but closed for modification. While this was an important principle, I hadn't implemented it in my project due to time contraints. In the near future, I would like to implement this principle in my project.
 
 
 
-2) Explain the advantages of applying SOLID principles to your project with examples.
+__Liskov Substitution Principle__
 
-The advantages of applying SOLID principles to my project are as follows:
+The Liskov Substitution Principle (LSP) is a principle that states that objects of a superclass should be replaceable with objects of a subclass without affecting the correctness of the program. While this was an important principle, I hadn't implemented it in my project due to time contraints. In the near future, I would like to implement this principle in my project.
+
+
+__Interface Segregation Principle__
+
+The Interface Segregation Principle (ISP) is a principle that states that clients should not be forced to depend on interfaces they do not use. By creating smaller, more focused interfaces instead of large, monolithic ones promotes better code organization and maintainability. 
+
+By having separate interfaces like `ProductService` and `CarService`, classes only need to implement the methods they actually use, following the Interface Segregation Principle. This approach keeps the system modular and easier to maintain by reducing unnecessary dependencies and clearly defining each interface's responsibilities.
+
+__Dependency Inversion Principle__
+
+The Dependency Inversion Principle (DIP) is a principle that states that high-level modules should not depend on low-level modules. Instead, both should depend on abstractions.
+
+For example, a `ProductController` would use a `ProductService` interface rather than directly creating an instance of `ProductServiceImpl`, making it easier to swap implementations or mock the service for testing. Similarly, a `CarController` would depend on a `CarService` interface, ensuring loose coupling and maintainable code architecture.
+
+This principle helps to decouple modules and reduce dependencies, making the codebase more flexible and easier to maintain.
+
+
+### The advantages of applying SOLID principles to my project are as follows:
 
 
 1. Improved code quality: By following SOLID principles, I was able to create a well-structured and maintainable codebase that is easy to understand and modify. This has helped me to write cleaner, more readable code that is less prone to bugs and errors.
@@ -93,9 +139,8 @@ The advantages of applying SOLID principles to my project are as follows:
 4. Testability: By following SOLID principles, I have created code that is easier to test and debug. This has helped me to write more comprehensive unit tests and ensure that my code behaves as expected in different scenarios.
 5. Scalability: By following SOLID principles, I have created a codebase that is more scalable and easier to maintain. This has helped me to build a project that can grow and evolve over time without becoming overly complex or difficult to manage.
 
-3) Explain the disadvantages of not applying SOLID principles to your project with examples.
 
-The disadvantages of not applying SOLID principles to my project are as follows:
+### The disadvantages of not applying SOLID principles to my project are as follows:
 
 1. Decreased code quality: Without following SOLID principles, my codebase would likely be less organized and harder to maintain. This could lead to code duplication, tight coupling, and other code smells that make it difficult to understand and modify the code.
 2. Reduced flexibility: Without following SOLID principles, my codebase would likely be less flexible and extensible. This could make it harder to add new features or make changes to the existing code without introducing bugs or breaking existing functionality.
