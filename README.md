@@ -16,6 +16,8 @@ __Koyeb Deploy Link__: [Eshop Application](https://excess-penelopa-keiradiaz-83f
    - [Reflection](#reflection-module-02)
 3. **MODULE 3**
    - [Reflection](#reflection-module-03)
+4. **MODULE 4**
+   - [Reflection](#reflection-module-04)
 
 
 # Module 01
@@ -147,4 +149,80 @@ This principle helps to decouple modules and reduce dependencies, making the cod
 3. Lower reusability: Without following SOLID principles, my codebase would likely be less modular and reusable. This could lead to code duplication and inefficiencies that make it harder to reuse components across different parts of the project.
 4. Poor testability: Without following SOLID principles, my codebase would likely be harder to test and debug. This could make it more difficult to write comprehensive unit tests and ensure that the code behaves as expected in different scenarios.
 5. Limited scalability: Without following SOLID principles, my codebase would likely be less scalable and harder to maintain. This could make it harder to build a project that can grow and evolve over time without becoming overly complex or difficult to manage.
+
+# Module 04
+
+## Reflection Module 04
+
+> Reflect based on Percival (2017) proposed self-reflective questions (in “Principles and Best Practice of Testing” submodule, chapter “Evaluating Your Testing Objectives”), whether this TDD flow is useful enough for you or not. If not, explain things that you need to do next time you make more tests.
+
+I do feel like that TDD has created a reverse engineering approach that I'm not quite familiar with. I'm used to creating the code first and then testing it, but with TDD, I have to create the tests first and then the code. 
+
+Although I understand that TDD still requires spikes and refactoring, I feel like I'm not quite used to the process. Albeit, I do see the benefits of TDD, such as the fact that it forces me to think about the requirements before I start coding. The unique style of commits with either `RED`, `GREEN`, or `REFACTOR` has helped me keep track of my progress and understand where I am in the process.
+
+
+>You have created unit tests in Tutorial. Now reflect whether your tests have successfully followed F.I.R.S.T. principle or not. If not, explain things that you need to do the next time you create more tests.
+
+
+The F.I.R.S.T. principle is a set of guidelines for writing good unit tests. The acronym stands for Fast, Independent, Repeatable, Self-Validating, and Timely.
+If we observe the tests that I have created, we can see that they follow the F.I.R.S.T. principle:
+
+1. Fast: The unit tests are fast and efficient, as they are designed to run quickly and provide immediate feedback on the code's correctness. This can be observed in the `ProductServiceTest`, which tests the product service's functionality in a timely manner.
+
+```java
+@Test
+    public void testGetAllProducts() {
+        List<Product> products = productService.getAllProducts();
+        assertEquals(0, products.size());
+    }
+```
+
+
+2. Isolated/I ndependent: The unit tests are independent of each other, meaning that they can be run in any order without affecting the results. This is done through @BeforeEach and @AfterEach annotations to set up and tear down the test environment.
+
+```java
+@BeforeEach
+    public void setUp() {
+        productService = new ProductService();
+    }
+
+@AfterEach
+    public void tearDown() {
+        productService = null;
+    }
+```
+
+3. Repeatable: The unit tests are repeatable, meaning that they produce the same results each time they are run. This is achieved by setting up the test environment before each test and cleaning up after each test.
+
+4. Self-Validating: The unit tests are self-validating, meaning that they can automatically determine whether they pass or fail. This is done through assertions that compare the expected and actual results of the test.
+
+```java
+@Test
+    public void testCreateProduct() {
+        Product product = new Product(1, "Laptop", 1000.0);
+        productService.createProduct(product);
+        assertEquals(1, productService.getAllProducts().size()); // check if product is created
+    }
+``` 
+
+5. Timely: The unit tests are timely, meaning that they cover all happy paths and unhappy paths of the code. This is done by writing tests for different scenarios, such as creating a product, updating a product, and deleting a product.
+
+```java
+    @Test
+    void testUpdateStatusInvalidStatus() {
+    ...
+    }
+    @Test
+    void testUpdateStatusInvalidOrderId() {
+    ...
+    }
+    @Test
+    void testFindByIdIfIdFound() {
+    ...
+    }
+    @Test
+    void testFindByIdIfIdNotFound() {
+    ...
+    }
+```
 
