@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class OrderTest {
 
     private List<Product> products;
+    
     @BeforeEach
     void setUp() {
         this.products = new ArrayList<>();
