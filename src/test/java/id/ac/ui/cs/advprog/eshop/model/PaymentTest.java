@@ -10,18 +10,17 @@ import java.util.Map;
 
 public class PaymentTest {
 
+    private String paymentId;
+    private String paymentMethod;
+    private String paymentStatus;
     private Map<String, String> paymentData;
     private Payment payment;
     
     @BeforeEach
     void setUp() {
-
-        private String paymentId;
-        private String paymentMethod;
-        private String paymentStatus;
         paymentId = "payment-123";
         paymentMethod = "Credit Card";
-        paymentStatus = "PENDING";
+        paymentStatus = "SUCCESS"; 
         
         this.paymentData = new HashMap<>();
         
@@ -69,7 +68,6 @@ public class PaymentTest {
     void testGetStatus() {
         assertEquals(paymentStatus, payment.getStatus());
     }
-
     
     @Test
     void testSetInvalidStatus() {
