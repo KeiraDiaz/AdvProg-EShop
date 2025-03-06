@@ -15,18 +15,22 @@ public class PaymentRepository {
     }
     
     public Payment save(Payment payment) {
-        return null;
+        payments.put(payment.getId(), payment);
+        return payment;
     }
     
     public Payment findById(String id) {
-        return null;
+        return payments.get(id);
     }
 
     public List<Payment> findAll() {
-        return null;
+        return new ArrayList<>(payments.values());
     }
     
     public List<Payment> findByOrderId(String orderId) {
-        return null;
+        return payments.values().stream()
+            .filter(payment -> payment.getOrder() != null && 
+                    orderId.equals(payment.getOrder().getId()))
+            .collect(Collectors.toList());
     }
 }
