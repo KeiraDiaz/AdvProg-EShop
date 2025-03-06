@@ -24,6 +24,7 @@ public class Order {
             throw new IllegalArgumentException();
         } else {
             this.products = products;
+            this.status = OrderStatus.WAITING_PAYMENT.getValue();
         }
     }
 

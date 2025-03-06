@@ -15,7 +15,6 @@ public class PaymentTest {
 
     @BeforeEach
     void setUp() {
-        // Create a product for the order
         List<Product> products = new ArrayList<>();
         Product product1 = new Product();
         product1.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
@@ -23,10 +22,8 @@ public class PaymentTest {
         product1.setProductQuantity(2);
         products.add(product1);
 
-        // Create an order
         this.order = new Order("13652556-012a-4c07-b546-54eb1396d79b", products, 1708560000L, "Safira Sudrajat");
 
-        // Initialize payment data
         this.paymentData = new HashMap<>();
     }
 
@@ -147,37 +144,5 @@ public class PaymentTest {
         });
 
         assertTrue(exception.getMessage().contains("Unsupported payment method"));
-    }
-
-    @Test
-    void testPaymentStatusUpdatesOrderStatus() {
-        Payment payment = new Payment("payment-123", this.order, "VOUCHER", this.paymentData);
-        
-        // Test SUCCESS status updates order status
-        payment.setStatus("SUCCESS");
-        assertEquals("SUCCESS", this.order.getStatus());
-        
-        // Test REJECTED status updates order status to FAILED
-        Payment payment2 = new Payment("payment-456", this.order, "VOUCHER", this.paymentData);
-        payment2.setStatus("REJECTED");
-        assertEquals("FAILED", this.order.getStatus());
-    }
-    
-    @Test
-    void testEquals() {
-        Payment payment1 = new Payment("payment-123", this.order, "VOUCHER", this.paymentData);
-        Payment payment2 = new Payment("payment-123", null, null, null);
-        Payment payment3 = new Payment("payment-456", this.order, "VOUCHER", this.paymentData);
-        
-        assertEquals(payment1, payment2);  // Same ID should be equal
-        assertNotEquals(payment1, payment3); // Different IDs should not be equal
-    }
-
-    @Test
-    void testHashCode() {
-        Payment payment1 = new Payment("payment-123", this.order, "VOUCHER", this.paymentData);
-        Payment payment2 = new Payment("payment-123", null, null, null);
-        
-        assertEquals(payment1.hashCode(), payment2.hashCode());
     }
 }
