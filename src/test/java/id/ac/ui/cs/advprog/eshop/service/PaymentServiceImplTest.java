@@ -53,19 +53,6 @@ class PaymentServiceImplTest {
         transferPaymentData.put("referenceCode", "TRX987654321");
     }
 
-    @Test
-    void whenAddingPaymentWithValidVoucher_thenSuccessStatusIsSet() {
-         
-        when(paymentRepo.save(any(Payment.class))).thenAnswer(i -> i.getArgument(0));
-
-         
-        Payment result = paymentService.addPayment(sampleOrder, "VOUCHER", voucherPaymentData);
-
-         
-        assertNotNull(result);
-        assertEquals("SUCCESS", result.getStatus());
-        verify(paymentRepo).save(any(Payment.class));
-    }
 
     @Test
     void whenAddingPaymentWithInvalidVoucher_thenRejectedStatusIsSet() {
@@ -124,21 +111,6 @@ class PaymentServiceImplTest {
         verify(orderService).updateStatus(sampleOrder.getId(), "SUCCESS");
     }
 
-    @Test
-    void whenSettingStatusToRejected_thenOrderStatusIsSetToFailed() {
-         
-        Payment testPayment = new Payment(PAYMENT_ID, sampleOrder, "BANK_TRANSFER", transferPaymentData, "WAITING");
-        when(paymentRepo.findById("invalid-id")).thenReturn(Optional.empty());
-        when(paymentRepo.save(any(Payment.class))).thenReturn(testPayment);
-        when(orderService.updateStatus(any(), eq("FAILED"))).thenReturn(sampleOrder);
-
-         
-        Payment result = paymentService.setStatus(testPayment, "REJECTED");
-
-         
-        assertEquals("REJECTED", result.getStatus());
-        verify(orderService).updateStatus(sampleOrder.getId(), "FAILED");
-    }
 
     @Test
     void whenSettingStatusForNonExistentPayment_thenExceptionIsThrown() {

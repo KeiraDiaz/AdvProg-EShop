@@ -31,18 +31,16 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment setStatus(Payment payment, String status) {
-        Payment existingPayment = paymentRepository.findById(payment.getId())
-            .orElseThrow(() -> new NoSuchElementException("Payment not found with ID: " + payment.getId()));
-        
-
-        
+        if (!paymentRepository.findById(payment.getId()).isPresent()) {
+            throw new NoSuchElementException("Payment not found with ID: " + payment.getId());
+        }
         if (!isValidStatus(status)) {
             throw new IllegalArgumentException("Invalid payment status: " + status);
         }
         
-        existingPayment.setStatus(status);
+        payment.setStatus(status);
         
-        Order order = existingPayment.getOrder();
+        Order order = payment.getOrder();
         if (order != null) {
             if ("SUCCESS".equals(status)) {
                 orderService.updateStatus(order.getId(), "SUCCESS");
@@ -51,8 +49,8 @@ public class PaymentServiceImpl implements PaymentService {
             }
         }
         
-
-        return paymentRepository.save(existingPayment);
+        paymentRepository.save(payment);
+        return payment;
     }
 
     @Override

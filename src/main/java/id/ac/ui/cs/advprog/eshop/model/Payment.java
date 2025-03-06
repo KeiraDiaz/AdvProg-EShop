@@ -64,15 +64,6 @@ public class Payment {
     
     public void setStatus(String status) {
         this.status = status;
-        
-        // Update order status based on payment status
-        if (order != null) {
-            if ("SUCCESS".equals(status)) {
-                order.setStatus("SUCCESS");
-            } else if ("REJECTED".equals(status)) {
-                order.setStatus("FAILED");
-            }
-        }
     }
     
     public Map<String, String> getPaymentData() {
