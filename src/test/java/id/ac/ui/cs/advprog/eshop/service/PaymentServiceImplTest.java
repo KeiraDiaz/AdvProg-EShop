@@ -15,6 +15,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -111,7 +112,7 @@ class PaymentServiceImplTest {
     void whenSettingStatusToSuccess_thenOrderStatusIsAlsoUpdated() {
          
         Payment testPayment = new Payment(PAYMENT_ID, sampleOrder, "VOUCHER", voucherPaymentData, "WAITING");
-        when(paymentRepo.findById(PAYMENT_ID)).thenReturn(testPayment);
+        when(paymentRepo.findById(PAYMENT_ID)).thenReturn(Optional.of(testPayment));
         when(paymentRepo.save(any(Payment.class))).thenReturn(testPayment);
         when(orderService.updateStatus(any(), eq("SUCCESS"))).thenReturn(sampleOrder);
 
@@ -127,7 +128,7 @@ class PaymentServiceImplTest {
     void whenSettingStatusToRejected_thenOrderStatusIsSetToFailed() {
          
         Payment testPayment = new Payment(PAYMENT_ID, sampleOrder, "BANK_TRANSFER", transferPaymentData, "WAITING");
-        when(paymentRepo.findById(PAYMENT_ID)).thenReturn(testPayment);
+        when(paymentRepo.findById("invalid-id")).thenReturn(Optional.empty());
         when(paymentRepo.save(any(Payment.class))).thenReturn(testPayment);
         when(orderService.updateStatus(any(), eq("FAILED"))).thenReturn(sampleOrder);
 
@@ -143,12 +144,13 @@ class PaymentServiceImplTest {
     void whenSettingStatusForNonExistentPayment_thenExceptionIsThrown() {
          
         Payment nonExistentPayment = new Payment("invalid-id", sampleOrder, "VOUCHER", voucherPaymentData);
-        when(paymentRepo.findById("invalid-id")).thenReturn(null);
+        when(paymentRepo.findById("invalid-id")).thenReturn(Optional.empty());
 
-          & Assert
-        assertThrows(NoSuchElementException.class, () -> 
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> 
             paymentService.setStatus(nonExistentPayment, "SUCCESS")
         );
+        assertEquals("Payment not found with ID: invalid-id", exception.getMessage());
+        assertEquals("Payment not found with ID: invalid-id", exception.getMessage());
         
         verify(paymentRepo, never()).save(any(Payment.class));
         verify(orderService, never()).updateStatus(any(), any());
@@ -158,7 +160,7 @@ class PaymentServiceImplTest {
     void whenGettingExistingPayment_thenCorrectPaymentIsReturned() {
          
         Payment expectedPayment = new Payment(PAYMENT_ID, sampleOrder, "VOUCHER", voucherPaymentData);
-        when(paymentRepo.findById(PAYMENT_ID)).thenReturn(expectedPayment);
+        when(paymentRepo.findById(PAYMENT_ID)).thenReturn(Optional.of(expectedPayment));
 
          
         Payment result = paymentService.getPayment(PAYMENT_ID);
@@ -172,7 +174,7 @@ class PaymentServiceImplTest {
     @Test
     void whenGettingNonExistentPayment_thenNullIsReturned() {
          
-        when(paymentRepo.findById("unknown-id")).thenReturn(null);
+        when(paymentRepo.findById("unknown-id")).thenReturn(Optional.empty());
 
          
         Payment result = paymentService.getPayment("unknown-id");

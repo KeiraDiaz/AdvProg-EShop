@@ -19,7 +19,6 @@ public class Order {
         this.id = id;
         this.orderTime = orderTime;
         this.author = author;
-        this.status = OrderStatus.WAITING_PAYMENT.getValue();
 
         if (products.isEmpty()) {
             throw new IllegalArgumentException();
@@ -29,8 +28,16 @@ public class Order {
     }
 
     public Order(String id, List<Product> products, Long orderTime, String author, String status) {
-        this(id, products, orderTime, author);
+        this.id = id;
+        this.orderTime = orderTime;
+        this.author = author;
         this.setStatus(status);
+
+        if (products.isEmpty()) {
+            throw new IllegalArgumentException();
+        } else {
+            this.products = products;
+        }
     }
 
     public void setStatus(String status) {

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class PaymentRepository {
@@ -19,8 +20,8 @@ public class PaymentRepository {
         return payment;
     }
     
-    public Payment findById(String id) {
-        return payments.get(id);
+    public Optional<Payment> findById(String id) {
+        return Optional.ofNullable(payments.get(id));
     }
 
     public List<Payment> findAll() {
