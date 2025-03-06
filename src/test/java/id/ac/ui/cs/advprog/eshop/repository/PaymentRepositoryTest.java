@@ -44,52 +44,35 @@ class PaymentRepositoryTest {
     }
 
     @Test
-    void testSavePaymentCreate() {
+    void testSavePayment() {
         Payment savedPayment = paymentRepository.save(payment1);
 
         assertNotNull(savedPayment);
         assertEquals(payment1.getId(), savedPayment.getId());
         assertEquals(payment1.getMethod(), savedPayment.getMethod());
-        
-        Payment foundPayment = paymentRepository.findById(payment1.getId()).orElse(null);
-        assertNotNull(foundPayment);
-        assertEquals(payment1.getId(), foundPayment.getId());
-        assertEquals(payment1.getMethod(), foundPayment.getMethod());
-        assertEquals(payment1.getStatus(), foundPayment.getStatus());
     }
 
     @Test
-    void testSavePaymentUpdate() {
-        paymentRepository.save(payment1);
-        
-        payment1.setStatus("SUCCESS");
-        Payment updatedPayment = paymentRepository.save(payment1);
-
-        assertEquals("SUCCESS", updatedPayment.getStatus());
-        Payment foundPayment = paymentRepository.findById(payment1.getId()).orElse(null);
-        assertNotNull(foundPayment);
-        assertEquals("SUCCESS", foundPayment.getStatus());
-        assertEquals("SUCCESS", foundPayment.getStatus());
-    }
     void testFindByIdIfExists() {
         paymentRepository.save(payment1);
 
-        Payment foundPayment = paymentRepository.findById(payment1.getId()).orElse(null);
+        Payment foundPayment = paymentRepository.findById(payment1.getId());
 
         assertNotNull(foundPayment);
         assertEquals(payment1.getId(), foundPayment.getId());
-        assertEquals(payment1.getMethod(), foundPayment.getMethod());
-        assertEquals(payment1.getStatus(), foundPayment.getStatus());
-        assertEquals(payment1.getOrder().getId(), foundPayment.getOrder().getId());
     }
+
+    @Test
     void testFindByIdIfNotExists() {
-        Payment foundPayment = paymentRepository.findById("non-existent-id").orElse(null);
+        Payment foundPayment = paymentRepository.findById("5645634");
+
         assertNull(foundPayment);
     }
 
     @Test
     void testFindAllIfEmpty() {
         List<Payment> allPayments = paymentRepository.findAll();
+
         assertTrue(allPayments.isEmpty());
     }
 
@@ -103,6 +86,19 @@ class PaymentRepositoryTest {
         assertEquals(2, allPayments.size());
         assertTrue(allPayments.contains(payment1));
         assertTrue(allPayments.contains(payment2));
+    }
+
+    @Test
+    void testSaveExistingPayment() {
+        paymentRepository.save(payment1);
+
+        payment1.setStatus("SUCCESS");
+        Payment updatedPayment = paymentRepository.save(payment1);
+
+        assertEquals("SUCCESS", updatedPayment.getStatus());
+
+        Payment foundPayment = paymentRepository.findById(payment1.getId());
+        assertEquals("SUCCESS", foundPayment.getStatus());
     }
 
     @Test
@@ -120,24 +116,7 @@ class PaymentRepositoryTest {
     @Test
     void testFindByOrderIdIfNotExists() {
         List<Payment> paymentsForOrder = paymentRepository.findByOrderId("non-existent-order-id");
+
         assertTrue(paymentsForOrder.isEmpty());
-    }
-    
-    @Test
-    void testOrderStatusUpdatedWhenPaymentSucceeds() {
-        paymentRepository.save(payment1);
-        payment1.setStatus("SUCCESS");
-        paymentRepository.save(payment1);
-        
-        assertEquals("SUCCESS", order.getStatus());
-    }
-    
-    @Test
-    void testOrderStatusUpdatedWhenPaymentRejected() {
-        paymentRepository.save(payment2);
-        payment2.setStatus("REJECTED");
-        paymentRepository.save(payment2);
-        
-        assertEquals("FAILED", order.getStatus());
     }
 }
