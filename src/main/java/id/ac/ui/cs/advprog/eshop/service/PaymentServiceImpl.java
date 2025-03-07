@@ -9,98 +9,100 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
     private PaymentRepository paymentRepository;
-    
+
     @Autowired
     private OrderService orderService;
 
     @Override
     public Payment addPayment(Order order, String method, Map<String, String> paymentData) {
-        String paymentId = order.getId();
+        String paymentId = UUID.randomUUID().toString();
+
         Payment payment = new Payment(paymentId, order, method, paymentData);
-        
-        validateAndSetStatus(payment);
-        
+
+        if ("VOUCHER".equals(method)) {
+            validateVoucherPayment(payment);
+        } else if ("BANK_TRANSFER".equals(method)) {
+            validateBankTransferPayment(payment);
+        }
+
         return paymentRepository.save(payment);
+    }
+
+    private void validateVoucherPayment(Payment payment) {
+        String voucherCode = payment.getPaymentData().get("voucherCode");
+
+        if (voucherCode == null || voucherCode.length() != 16) {
+            payment.setStatus("REJECTED");
+            return;
+        }
+
+        if (!voucherCode.startsWith("ESHOP")) {
+            payment.setStatus("REJECTED");
+            return;
+        }
+
+        int digitCount = 0;
+        for (char c : voucherCode.toCharArray()) {
+            if (Character.isDigit(c)) {
+                digitCount++;
+            }
+        }
+
+        if (digitCount != 8) {
+            payment.setStatus("REJECTED");
+            return;
+        }
+
+
+        payment.setStatus("SUCCESS");
+    }
+
+    private void validateBankTransferPayment(Payment payment) {
+        Map<String, String> paymentData = payment.getPaymentData();
+        String bankName = paymentData.get("bankName");
+        String referenceCode = paymentData.get("referenceCode");
+
+        if (bankName == null || bankName.isEmpty() ||
+                referenceCode == null || referenceCode.isEmpty()) {
+            payment.setStatus("REJECTED");
+            return;
+        }
+
+        payment.setStatus("SUCCESS");
     }
 
     @Override
     public Payment setStatus(Payment payment, String status) {
-        if (!paymentRepository.findById(payment.getId()).isPresent()) {
+        Payment existingPayment = paymentRepository.findById(payment.getId());
+        if (existingPayment == null) {
             throw new NoSuchElementException("Payment not found with ID: " + payment.getId());
         }
-        if (!isValidStatus(status)) {
-            throw new IllegalArgumentException("Invalid payment status: " + status);
+
+        existingPayment.setStatus(status);
+
+        if ("SUCCESS".equals(status)) {
+            orderService.updateStatus(existingPayment.getOrder().getId(), "SUCCESS");
+        } else if ("REJECTED".equals(status)) {
+            orderService.updateStatus(existingPayment.getOrder().getId(), "FAILED");
         }
-        
-        payment.setStatus(status);
-        
-        Order order = payment.getOrder();
-        if (order != null) {
-            if ("SUCCESS".equals(status)) {
-                orderService.updateStatus(order.getId(), "SUCCESS");
-            } else if ("REJECTED".equals(status)) {
-                orderService.updateStatus(order.getId(), "FAILED");
-            }
-        }
-        
-        paymentRepository.save(payment);
-        return payment;
+
+        return paymentRepository.save(existingPayment);
     }
 
     @Override
     public Payment getPayment(String paymentId) {
-        return paymentRepository.findById(paymentId).orElse(null);
+        return paymentRepository.findById(paymentId);
     }
 
     @Override
     public List<Payment> getAllPayments() {
         return paymentRepository.findAll();
-    }
-    
-    private void validateAndSetStatus(Payment payment) {
-        String method = payment.getMethod();
-        
-        if ("VOUCHER".equals(method)) {
-            validateVoucherPayment(payment);
-        } else if ("BANK_TRANSFER".equals(method)) {
-            validateBankTransferPayment(payment);
-        } else {
-            throw new IllegalArgumentException("Unsupported payment method: " + method);
-        }
-    }
-    
-    private void validateVoucherPayment(Payment payment) {
-        Map<String, String> paymentData = payment.getPaymentData();
-        String voucherCode = paymentData.get("voucherCode");
-        
-        boolean isValid = voucherCode != null && 
-                          voucherCode.startsWith("ESHOP") && 
-                          voucherCode.length() == 16 &&
-                          voucherCode.chars().filter(Character::isDigit).count() >= 4;
-        
-        payment.setStatus(isValid ? "SUCCESS" : "REJECTED");
-    }
-    
-    private void validateBankTransferPayment(Payment payment) {
-        Map<String, String> paymentData = payment.getPaymentData();
-        String bankName = paymentData.get("bankName");
-        String referenceCode = paymentData.get("referenceCode");
-        
-        boolean isValid = bankName != null && !bankName.isEmpty() &&
-                          referenceCode != null && !referenceCode.isEmpty();
-        
-        payment.setStatus(isValid ? "SUCCESS" : "REJECTED");
-    }
-    
-    private boolean isValidStatus(String status) {
-        return "WAITING".equals(status) || 
-               "SUCCESS".equals(status) || 
-               "REJECTED".equals(status);
     }
 }
